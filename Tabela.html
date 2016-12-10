@@ -1,0 +1,104 @@
+<html ng-app="listaTarefas">
+
+<head>
+    <title>LAB 02</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <style>
+        .jumbotron {
+            width: 400px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+        .table{
+            margin-top: 10px;
+        }
+        .from-control{
+            margin-bottom: 5px;
+        }
+        .concluida{
+            background-color: limegreen;
+        }
+    </style>
+    <script src="js/angular.js"></script>
+    <script>
+        angular.module("listaTarefas",[]);
+        angular.module("listaTarefas").controller("listaTarefasCtrl", function ($scope) {
+            $scope.app = "LISTA DE TAREFAS";
+            $scope.tarefas = [];
+            $scope.tarefasConcluidas = [];
+            $scope.addTarefa = function (tarefa) {
+                tarefa.status = "não concluida"
+                $scope.tarefas.push(angular.copy(tarefa));
+                delete $scope.tarefa;
+
+            }
+            $scope.concluirTarefa = function (tarefas) {
+                $scope.tarefas = tarefas.filter(function (tarefa) {
+                    if (!tarefa.concluida) {
+                        return tarefa;
+                    } else {
+                        tarefa.status = "concluida"
+                        $scope.tarefasConcluidas.push(angular.copy(tarefa));
+                    }
+                });
+            }
+            $scope.limpaList = function () {
+                $scope.tarefas = [];
+                $scope.tarefasConcluidas = [];
+
+            }
+                 
+
+
+        });
+    </script>
+
+</head>
+
+<body ng-controller="listaTarefasCtrl">
+
+    <div class="jumbotron">
+        <h3>{{app}}</h3>
+        <hr/>
+        <input class="from-control" type="text" ng-model="tarefa.nome" placeholder="Tarefa" />
+        <button class="btn btn-primary btn-block" ng-click="addTarefa(tarefa)" ng-disabled="!tarefa.nome"> Adicionar Tarefa </button>
+
+
+        <table class="table">
+            <tr>
+
+
+                <th>tarefa</th>
+                <th>status</th>
+                <th></th>
+            </tr>
+
+            <tr  ng-class="{concluida: tarefa.concluida}" ng-repeat="tarefa in tarefasConcluidas">
+
+                <td>{{tarefa.nome}}</td>
+
+                <td>{{tarefa.status}}</td>
+
+
+            </tr>
+
+            <tr  ng-class="{concluida: tarefa.concluida}" ng-repeat="tarefa in tarefas">
+
+                <td>{{tarefa.nome}}</td>
+                <td>{{tarefa.status}}</td>
+                <td><input type="checkbox" ng-model="tarefa.concluida"></td>
+            </tr>
+
+        </table>
+
+        <button class="btn btn-primary btn-block" ng-click="concluirTarefa(tarefas)"  > Concluir Tarefa </button>
+        <button class="btn btn-danger btn-block" ng-click="limpaList()"> Limpa Lista </button>
+
+
+    </div>
+
+</body>
+</html>
